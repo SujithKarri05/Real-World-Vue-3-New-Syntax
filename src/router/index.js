@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MovieReleases from '../views/MovieReleases.vue'
+import ClassicMovies from '../views/ClassicMovies.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,17 +7,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'Classics',
-      component: MovieReleases,
-      props: { category: 'classic' },
+      component: ClassicMovies,
+      props: route => ({ page: parseInt(route.query.page) || 1})
     },
     {
       path: '/new-releases',
       name: 'New Releases',
-      component: MovieReleases,
-      props: { category: 'new-release' },
-    },
+      component: () => import('../views/NewMovies.vue'),
+      props: {category: 'new-release'},
+      },
         {
-      path: '/event/:id',
+      path: '/event/:category/:id',
       name: 'movie-details',
       props: true,
       component: () => import('../views/MovieDetails.vue')

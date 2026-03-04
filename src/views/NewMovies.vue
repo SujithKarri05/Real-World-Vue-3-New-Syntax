@@ -1,23 +1,11 @@
 <script setup>
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/services/EventService.js'
-import { onMounted, ref } from 'vue'
-
-const props = defineProps({
-  category: {
-    type: String,
-    required: true,
-  },
-})
+import { ref, onMounted } from 'vue'
 
 const events = ref(null)
-onMounted(()  => {
-  const request =
-    props.category === 'new-release'
-      ? EventService.getNewReleases()
-      : EventService.getClassics()
-
-  request
+onMounted(() => {
+  EventService.getNewReleases()
     .then(response => {
       events.value = response.data
     })

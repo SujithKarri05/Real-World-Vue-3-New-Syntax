@@ -1,11 +1,11 @@
 <script setup>
-import {ref, watch} from 'vue'
+import {onMounted, ref} from 'vue'
 import EventService from '../services/EventService'
 
 const event = ref(null)
 const props = defineProps({
   id: {
-    type: Number,
+    type: String,
     required: true,
   },
   category: {
@@ -13,20 +13,15 @@ const props = defineProps({
     required: true,
   },
 })
-watch(() => [props.id, props.category], ([newId, newCategory]) => {
-  const request = newCategory === 'new-release' 
-  ?EventService.getNewReleaseEventDetails(newId)
-  :EventService.getClassicEventDetails(newId)
-  
-
-  request
+onMounted(() => {
+  EventService.getEvent(props.id, props.category)
     .then(response => {
       event.value = response.data
     })
     .catch(error => {
       console.error('Error fetching event:', error)
     })
-}, { immediate: true })
+})
 </script>
 <template>
   <div v-if="event">

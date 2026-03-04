@@ -10,16 +10,16 @@ const apiClient = axios.create({
 })
 
 export default {
-  getClassics() {
-    return apiClient.get('/db-vue/events')
+  // getMovies(category) {
+  //   return apiClient.get(`/${category}/events`)
+  // },
+  getNewReleases(perPage, page) {
+    return apiClient.get('/new-release/events?_limit=' + perPage + '&_page=' + page)
   },
-  getNewReleases() {
-    return apiClient.get('/newReleases/events')
+  getClassicMovies(perPage, page) {
+    return apiClient.get('/classic-release/events?_limit=' + perPage + '&_page=' + page)
   },
-  getClassicEventDetails(id) {
-    return apiClient.get(`/db-vue/events/${id}`)
-  },
-  getNewReleaseEventDetails(id) {
-    return apiClient.get(`/newReleases/events/${id}`)
-  }
+  getEvent(id, category) {
+    return apiClient.get(`/${category}/events/${id}`)
+}
 }
