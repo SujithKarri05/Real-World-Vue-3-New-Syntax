@@ -14,7 +14,7 @@ const router = createRouter({
       path: '/new-releases',
       name: 'New Releases',
       component: () => import('../views/NewMovies.vue'),
-      props: {category: 'new-release'},
+      props: route => ({ page: parseInt(route.query.page) || 1})
       },
         {
       path: '/event/:category/:id',

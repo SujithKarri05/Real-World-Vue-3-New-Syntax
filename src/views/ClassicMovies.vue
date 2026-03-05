@@ -1,14 +1,21 @@
 <script setup>
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/services/EventService.js'
-import { ref, onMounted } from 'vue'
+import { onMounted, ref, watch, computed  } from 'vue'
 
 const props = defineProps(["page"])
 const events = ref(null)
+const totalEvents = ref(0)
+
+const hasNextPage = computed(() => {
+  const totalPages = Math.ceil(totalEvents.value / 3)
+  return props.page < totalPages
+})
 const fetchEvents = () => {
-  EventService.getClassicMovies(1, props.page)
+  EventService.getClassicMovies(3, props.page)
     .then(response => {
       events.value = response.data
+      totalEvents.value = response.headers["x-total-count"]
     })
     .catch(error => {
       console.error('Error fetching events:', error)
@@ -16,6 +23,11 @@ const fetchEvents = () => {
 }
 
 onMounted(() => {
+  fetchEvents()
+})
+
+watch(() => props.page, () => {
+  events.value = null
   fetchEvents()
 })
 </script>
@@ -27,10 +39,11 @@ onMounted(() => {
         <router-link :to="{ name: 'Classics', query: { page: page - 1 } }"
   rel="previous"
   v-if="page != 1"
-  >Previous</router-link>
+  >Previous </router-link>
 
   <router-link :to="{ name: 'Classics', query: { page: page + 1 } }"
   rel="next"
+  v-if="hasNextPage"
   >Next</router-link>
 </template>
 
